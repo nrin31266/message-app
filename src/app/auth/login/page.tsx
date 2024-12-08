@@ -2,66 +2,77 @@
 
 import { Button, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); // Ngăn không cho form tự động reload trang
-    console.log("Email:", email);
-    console.log("Password:", password);
+  const handleSubmit = (values: { usernameOrEmail: string; password: string }) => {
+    console.log(values);
+
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <TextField
-            required
-            id="outlined-required"
-            label="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ width: "300px" }}
-          />
-        </div>
-        <div className="mb-3">
-          <TextField
-            id="outlined-password-input"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ width: "300px" }}
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <Button
-            size="large"
-            type="submit"
-            style={{ width: "300px" }}
-            variant="contained"
-          >
-            Login
-          </Button>
-        </div>
-        <div>
-          <Button
-            onClick={() => router.push('/auth/register')}
-            size="large"
-            style={{ width: "300px" }}
-            variant="outlined"
-          >
-            Register
-          </Button>
-        </div>
-      </form>
-    </>
+    <div className="flex justify-center items-center" style={{width: '100%'}}>
+      <Formik
+        initialValues={{ usernameOrEmail: "", password: "" }} // giá trị khởi tạo
+        onSubmit={handleSubmit} // xử lý submit form
+      >
+        {({ handleChange, handleBlur, values }) => (
+          <Form className="rounded shadow-lg" style={{width: '100%'}}>
+            <div className="mb-3">
+              <Field
+                name="usernameOrEmail"
+                as={TextField}
+                label="Username or Email"
+                fullWidth
+                variant="outlined"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.usernameOrEmail}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <Field
+                name="password"
+                as={TextField}
+                label="Password"
+                type="password"
+                fullWidth
+                variant="outlined"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.password}
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <Button
+                type="submit"
+                size="large"
+                variant="contained"
+                fullWidth
+              >
+                Login
+              </Button>
+            </div>
+            <div>
+              <Button
+                onClick={() => router.push("/auth/register")}
+                size="large"
+                variant="outlined"
+                fullWidth
+              >
+                Register
+              </Button>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </div>
   );
 };
 

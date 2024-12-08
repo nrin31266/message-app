@@ -1,10 +1,13 @@
 "use client";
 
+import { colors } from "@/constant/globleConstant";
 import { Card } from "@mui/material";
-import Image from "next/image";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 const AuthLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
+  const path = usePathname();
+
   return (
     <div
       className="d-flex"
@@ -14,20 +17,17 @@ const AuthLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
         height: "100vh",
       }}
     >
-      <Card className="col-md-6 col-lg-4 col-10 d-block">
-        <div className="d-flex justify-content-center mb-3">
-          <img
-            src="https://firebasestorage.googleapis.com/v0/b/kanban-ac9c5.appspot.com/o/message%2Fmessenger-icon-1024x1024-wsuio165.png?alt=media&token=134e3696-1054-419a-9b53-ec51c0df5c73"
-            alt=""
-            width={100}
-          />
+      <Card style={{ width: "500px" }} className="p-4">
+        <div className="d-flex justify-content-center">
+          <img src="/assets/logo.png" alt="logo" width={300} />
         </div>
-        <h4 className="mb-4 justify-content-center d-flex">Connect with your favourite people</h4>
-        <div
-        className="d-flex justify-content-center mb-3"
-        style={{}}
-        >{children}</div>
-
+        <div className="mb-4 justify-content-center d-flex flex-column">
+          <h2 style={{textAlign: 'center', color: colors.PRIMARY}}>{path.startsWith("/auth/login") ? "Login" : "Register"}</h2>
+          <h4 style={{ opacity: "0.5", textAlign: 'center' }}>Connect with your favourite people</h4>
+        </div>
+        <div className="" style={{}}>
+          {children}
+        </div>
       </Card>
     </div>
   );

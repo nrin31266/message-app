@@ -1,9 +1,8 @@
-
-
+// RootLayout.tsx
+import ThemeProviderWrapper from "@/components/ThemeProviderComponent";
 import "./globals.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-
   return (
     <html lang="en">
       <head>
@@ -14,7 +13,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           crossOrigin="anonymous"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
+      </body>
     </html>
   );
 }
