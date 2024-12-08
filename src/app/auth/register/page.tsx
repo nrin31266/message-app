@@ -1,15 +1,15 @@
 "use client"; // Đảm bảo đây là Client Component
 
-import { Button, TextField } from "@mui/material";
+import { Button, FormControl, FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
 
 const RegisterPage = () => {
   const router = useRouter();
 
   const handleSubmit = (values: {
+    gender: string,
     firstName: string;
     email: string;
     password: string;
@@ -19,6 +19,13 @@ const RegisterPage = () => {
     rePassword: string;
   }) => {
     console.log(values);
+  };
+
+  // Hàm chặn nhập khoảng trắng
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === ' ') {
+      e.preventDefault(); // Ngăn chặn ký tự khoảng trắng
+    }
   };
 
   return (
@@ -32,12 +39,13 @@ const RegisterPage = () => {
           lastName: "",
           dob: "",
           rePassword: "",
+          gender: "male"
         }}
         onSubmit={handleSubmit} // xử lý submit form
       >
         {({ handleChange, handleBlur, values }) => (
           <Form>
-            <div className="mb-3">
+            <div className="mb-2">
               <Field
                 name="username"
                 as={TextField}
@@ -45,13 +53,16 @@ const RegisterPage = () => {
                 type="text"
                 fullWidth
                 variant="outlined"
-                onChange={handleChange}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  handleChange(e);
+                }}
+                onKeyPress={handleKeyPress} // Ngăn không cho nhập khoảng trắng
                 onBlur={handleBlur}
                 value={values.username}
                 required
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-2">
               <Field
                 name="dob"
                 as={TextField}
@@ -67,8 +78,9 @@ const RegisterPage = () => {
                   shrink: true, 
                 }}
               />
+              
             </div>
-            <div className="mb-3 row">
+            <div className="mb-2 row">
               <div className="col pr-1">
                 <Field
                   name="firstName"
@@ -98,7 +110,25 @@ const RegisterPage = () => {
                 />
               </div>
             </div>
-            <div className="mb-3">
+            <div className="mb-1">
+              <FormControl component="fieldset">
+                <RadioGroup
+                  aria-label="gender"
+                  name="gender"
+                  value={values.gender}
+                  onChange={handleChange}
+                  row
+                >
+                  <div className="d-flex" style={{alignItems: 'center'}}>
+                  <h6 className="mr-2" style={{opacity: 0.7, fontSize: '0.9rem'}}>Gender:</h6>
+                  <FormControlLabel value="male" control={<Radio />} label="Male" />
+                  <FormControlLabel value="female" control={<Radio />} label="Female" />
+                  <FormControlLabel value="other" control={<Radio />} label="Other" />
+                  </div>
+                </RadioGroup>
+              </FormControl>
+            </div>
+            <div className="mb-2">
               <Field
                 name="email"
                 as={TextField}
@@ -112,7 +142,7 @@ const RegisterPage = () => {
                 required
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-2">
               <Field
                 name="password"
                 as={TextField}
@@ -126,7 +156,7 @@ const RegisterPage = () => {
                 required
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-2">
               <Field
                 name="rePassword"
                 as={TextField}

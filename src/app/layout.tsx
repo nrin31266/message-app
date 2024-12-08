@@ -1,8 +1,15 @@
 // RootLayout.tsx
+"use client";
 import ThemeProviderWrapper from "@/components/ThemeProviderComponent";
 import "./globals.css";
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Routers from "@/routers/Routers";
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <head>
