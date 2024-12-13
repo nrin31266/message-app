@@ -1,12 +1,21 @@
 "use client"; // Đảm bảo đây là Client Component
 
-import { Button, FormControl, FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
+import { Box, Button, FormControl, FormControlLabel, Radio, RadioGroup, Snackbar, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
+import NotificationComponent from "@/components/NotificationComponent";
 
 const RegisterPage = () => {
   const router = useRouter();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarContent, setSnackbarContent] = useState<{message: string, severity: "success" | "error"}>({message: "", severity: "success"});
+
+  useEffect(() => {
+    if(snackbarContent.message){
+      setSnackbarOpen(true);
+    }
+  }, [snackbarContent]);
 
   const handleSubmit = (values: {
     gender: string,
@@ -19,6 +28,13 @@ const RegisterPage = () => {
     rePassword: string;
   }) => {
     console.log(values);
+    if(values.password !== values.rePassword){
+      setSnackbarContent({message: "The password must be the same", severity: "error"});
+      return;
+    }
+    
+
+    setSnackbarContent({message: "Register successfully", severity: "success"});
   };
 
   // Hàm chặn nhập khoảng trắng
@@ -27,9 +43,19 @@ const RegisterPage = () => {
       e.preventDefault(); // Ngăn chặn ký tự khoảng trắng
     }
   };
+  const handleClose = () => {
+    setSnackbarOpen(false);
+  };
 
   return (
-    <div className="flex justify-center items-center" style={{ width: "100%" }}>
+    <>
+      <NotificationComponent
+        open={snackbarOpen}
+        message={snackbarContent.message}
+        severity={snackbarContent.severity}
+        onClose={handleClose}
+      />
+      <div className="flex justify-center items-center" style={{ width: "100%" }}>
       <Formik
         initialValues={{
           firstName: "",
@@ -189,6 +215,7 @@ const RegisterPage = () => {
         )}
       </Formik>
     </div>
+    </>
   );
 };
 

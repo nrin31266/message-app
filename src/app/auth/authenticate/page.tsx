@@ -1,9 +1,15 @@
-import React from 'react'
+"use client";
+import { Box, CircularProgress } from "@mui/material";
+import React from "react";
 
 const Authenticate = () => {
   return (
-    <div>Authenticate</div>
-  )
-}
+    <div>
+      <Box sx={{ display: "flex", justifyContent: 'center'}}>
+        <CircularProgress />
+      </Box>
+    </div>
+  );
+};
 
-export default Authenticate
+export default Authenticate;
