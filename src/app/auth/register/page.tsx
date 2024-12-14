@@ -60,7 +60,7 @@ const RegisterPage = () => {
       console.log(error);
       setSnackbarContent({ message: error.message, severity: "error" });
     } finally {
-      // setIsLoading(false);
+      setIsLoading(false);
     }
   };
 

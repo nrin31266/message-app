@@ -1,4 +1,4 @@
-'use client'; // Đảm bảo đây là Client Component
+"use client"; // Đảm bảo đây là Client Component
 
 import { Button, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -7,30 +7,40 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import NotificationComponent from "@/components/NotificationComponent";
 import { GLOBAL_API } from "@/config/config";
 import handleApi from "@/config/handleApi";
-import { setCookie, getCookie } from 'cookies-next';
+import { setCookie, getCookie } from "cookies-next";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const LoginPage = () => {
   const router = useRouter();
-   const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [snackbarContent, setSnackbarContent] = useState<{message: string, severity: "success" | "error"}>({message: "", severity: "success"});
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarContent, setSnackbarContent] = useState<{
+    message: string;
+    severity: "success" | "error";
+  }>({ message: "", severity: "success" });
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    if (snackbarContent.message) {
+      setSnackbarOpen(true);
+    }
+  }, [snackbarContent]);
 
-    useEffect(() => {
-      if(snackbarContent.message){
-        setSnackbarOpen(true);
-      }
-    }, [snackbarContent]);
-
-  const handleSubmit = async (values: { usernameOrEmail: string; password: string }) => {
+  const handleSubmit = async (values: {
+    usernameOrEmail: string;
+    password: string;
+  }) => {
     console.log(values);
     try {
-      const res:any = await handleApi(`${GLOBAL_API.AUTHENTICATION}/login`, values, 'post');
+      const res: any = await handleApi(
+        `${GLOBAL_API.AUTHENTICATION}/login`,
+        values,
+        "post"
+      );
       setCookie("token", res.result.token);
       router.push("/");
     } catch (error: any) {
-      console.log(error)
-      setSnackbarContent({message: error.message, severity: "error"});
+      console.log(error);
+      setSnackbarContent({ message: error.message, severity: "error" });
     }
-
   };
 
   const handleClose = () => {
@@ -39,70 +49,78 @@ const LoginPage = () => {
 
   return (
     <>
-    <NotificationComponent
+      <NotificationComponent
         open={snackbarOpen}
         message={snackbarContent.message}
         severity={snackbarContent.severity}
         onClose={handleClose}
       />
-    <div className="flex justify-center items-center" style={{width: '100%'}}>
-      <Formik
-        initialValues={{ usernameOrEmail: "", password: "" }} // giá trị khởi tạo
-        onSubmit={handleSubmit} // xử lý submit form
+      <div
+        className="flex justify-center items-center"
+        style={{ width: "100%" }}
       >
-        {({ handleChange, handleBlur, values }) => (
-          <Form className="rounded shadow-lg" style={{width: '100%'}}>
-            <div className="mb-3">
-              <Field
-                name="usernameOrEmail"
-                as={TextField}
-                label="Username or Email"
-                fullWidth
-                variant="outlined"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.usernameOrEmail}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <Field
-                name="password"
-                as={TextField}
-                label="Password"
-                type="password"
-                fullWidth
-                variant="outlined"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.password}
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <Button
-                type="submit"
-                size="large"
-                variant="contained"
-                fullWidth
-              >
-                Login
-              </Button>
-            </div>
-            <div>
-              <Button
-                onClick={() => router.push("/auth/register")}
-                size="large"
-                variant="outlined"
-                fullWidth
-              >
-                Register
-              </Button>
-            </div>
-          </Form>
-        )}
-      </Formik>
-    </div>
+        <Formik
+          initialValues={{ usernameOrEmail: "", password: "" }} // giá trị khởi tạo
+          onSubmit={handleSubmit} // xử lý submit form
+        >
+          {({ handleChange, handleBlur, values }) => (
+            <fieldset disabled={isLoading}>
+              <Form className="rounded shadow-lg" style={{ width: "100%" }}>
+                <div className="mb-3">
+                  <Field
+                    name="usernameOrEmail"
+                    as={TextField}
+                    label="Username or Email"
+                    fullWidth
+                    variant="outlined"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.usernameOrEmail}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <Field
+                    name="password"
+                    as={TextField}
+                    label="Password"
+                    type="password"
+                    fullWidth
+                    variant="outlined"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.password}
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <LoadingButton
+                    type="submit"
+                    size="large"
+                    variant="contained"
+                    fullWidth
+                    loading={isLoading}
+                    loadingPosition="end"
+                  >
+                    Login
+                  </LoadingButton>
+                </div>
+                <div>
+                  <Button
+                    onClick={() => router.push("/auth/register")}
+                    size="large"
+                    variant="outlined"
+                    fullWidth
+                    disabled={isLoading}
+                  >
+                    Register
+                  </Button>
+                </div>
+              </Form>
+            </fieldset>
+          )}
+        </Formik>
+      </div>
     </>
   );
 };

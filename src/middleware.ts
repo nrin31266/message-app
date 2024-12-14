@@ -1,15 +1,14 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 
-// Cấu hình danh sách các trang công khai không cần xác thực
-const publicPaths = ['/auth/login', '/auth/register', '/about'];
+const publicPaths = ['/auth/login', '/auth/register',];
 
 export function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
-  const authData = req.cookies.get('token');  
+  const token = req.cookies.get('token');  
 
   
-  if (!authData && !publicPaths.includes(path)) {
+  if (!token && !publicPaths.includes(path)) {
     return NextResponse.redirect(new URL('/auth/login', req.url));  
   }
 
@@ -17,5 +16,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/'],  
+  matcher: ['/', '/about'],  
 };
