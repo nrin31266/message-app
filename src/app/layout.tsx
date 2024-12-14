@@ -5,6 +5,8 @@ import "./globals.css";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Routers from "@/routers/Routers";
+import { Provider } from "react-redux";
+import { store } from "@/redux/store";
 export default function RootLayout({
   children,
 }: {
@@ -21,7 +23,9 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
+        <Provider store={store}>
+          <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
+        </Provider>
       </body>
     </html>
   );

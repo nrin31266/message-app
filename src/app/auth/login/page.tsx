@@ -9,6 +9,8 @@ import { GLOBAL_API } from "@/config/config";
 import handleApi from "@/config/handleApi";
 import { setCookie, getCookie } from "cookies-next";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/userSlice";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -18,6 +20,8 @@ const LoginPage = () => {
     severity: "success" | "error";
   }>({ message: "", severity: "success" });
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (snackbarContent.message) {
       setSnackbarOpen(true);
@@ -29,6 +33,7 @@ const LoginPage = () => {
     password: string;
   }) => {
     console.log(values);
+    setIsLoading(true);
     try {
       const res: any = await handleApi(
         `${GLOBAL_API.AUTHENTICATION}/login`,
@@ -36,10 +41,15 @@ const LoginPage = () => {
         "post"
       );
       setCookie("token", res.result.token);
+      const resInfo: any = await handleApi(`${GLOBAL_API.PROFILE}/my-info`);
+      console.log(resInfo);
+      dispatch(setUser(resInfo.result));
       router.push("/");
     } catch (error: any) {
       console.log(error);
       setSnackbarContent({ message: error.message, severity: "error" });
+    }finally{
+      setIsLoading(false);
     }
   };
 

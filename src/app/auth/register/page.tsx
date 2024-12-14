@@ -55,6 +55,9 @@ const RegisterPage = () => {
       const resRegister = await handleApi(`${GLOBAL_API.USER}`, values, 'post');
       const resLogin:any = await handleApi(`${GLOBAL_API.AUTHENTICATION}/login`, {usernameOrEmail: values.username, password: values.password}, 'post');
       setCookie("token", resLogin.result.token);
+      const resInfo: any = await handleApi(`${GLOBAL_API.PROFILE}/my-info`);
+      console.log(resInfo);
+      
       router.push("/");
     } catch (error: any) {
       console.log(error);
