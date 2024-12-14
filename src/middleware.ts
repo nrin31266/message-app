@@ -6,7 +6,7 @@ const publicPaths = ['/auth/login', '/auth/register', '/about'];
 
 export function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
-  const authData = req.cookies.get('auth');  
+  const authData = req.cookies.get('token');  
 
   
   if (!authData && !publicPaths.includes(path)) {

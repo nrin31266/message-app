@@ -2,20 +2,49 @@
 
 import { Button, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import NotificationComponent from "@/components/NotificationComponent";
+import { GLOBAL_API } from "@/config/config";
+import handleApi from "@/config/handleApi";
+import { setCookie, getCookie } from 'cookies-next';
 
 const LoginPage = () => {
   const router = useRouter();
+   const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarContent, setSnackbarContent] = useState<{message: string, severity: "success" | "error"}>({message: "", severity: "success"});
 
-  const handleSubmit = (values: { usernameOrEmail: string; password: string }) => {
+    useEffect(() => {
+      if(snackbarContent.message){
+        setSnackbarOpen(true);
+      }
+    }, [snackbarContent]);
+
+  const handleSubmit = async (values: { usernameOrEmail: string; password: string }) => {
     console.log(values);
-    
+    try {
+      const res:any = await handleApi(`${GLOBAL_API.AUTHENTICATION}/login`, values, 'post');
+      setCookie("token", res.result.token);
+      router.push("/");
+    } catch (error: any) {
+      console.log(error)
+      setSnackbarContent({message: error.message, severity: "error"});
+    }
 
   };
 
+  const handleClose = () => {
+    setSnackbarOpen(false);
+  };
+
   return (
+    <>
+    <NotificationComponent
+        open={snackbarOpen}
+        message={snackbarContent.message}
+        severity={snackbarContent.severity}
+        onClose={handleClose}
+      />
     <div className="flex justify-center items-center" style={{width: '100%'}}>
       <Formik
         initialValues={{ usernameOrEmail: "", password: "" }} // giá trị khởi tạo
@@ -74,6 +103,7 @@ const LoginPage = () => {
         )}
       </Formik>
     </div>
+    </>
   );
 };
 
