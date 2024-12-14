@@ -16,6 +16,8 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import handleApi from "@/config/handleApi";
 import { setCookie } from "cookies-next";
 import { GLOBAL_API } from "@/config/config";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/userSlice";
 
 const RegisterPage = () => {
   const router = useRouter();
@@ -25,6 +27,7 @@ const RegisterPage = () => {
     severity: "success" | "error";
   }>({ message: "", severity: "success" });
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (snackbarContent.message) {
@@ -57,7 +60,7 @@ const RegisterPage = () => {
       setCookie("token", resLogin.result.token);
       const resInfo: any = await handleApi(`${GLOBAL_API.PROFILE}/my-info`);
       console.log(resInfo);
-      
+      dispatch(setUser(resInfo.result));
       router.push("/");
     } catch (error: any) {
       console.log(error);
