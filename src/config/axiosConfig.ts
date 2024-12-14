@@ -1,5 +1,6 @@
 import axios from "axios";
 import { setCookie, getCookie } from 'cookies-next';
+import { ApiResponse } from './../models/AppModel';
 
 // Cấu hình axios
 const axiosInstance = axios.create({
@@ -34,7 +35,7 @@ axiosInstance.interceptors.response.use(
     return response.data;
   },
   (error:any) => {
-    
+
     // // Xử lý lỗi toàn cục (ví dụ: xử lý lỗi 401, 500)
     // if (error.response?.status === 401) {
     //   // Nếu token hết hạn hoặc không hợp lệ, bạn có thể redirect đến trang login
