@@ -40,11 +40,13 @@
 .chat-left{
   flex-grow: 1;
   background-color: #888;
+  min-width: 300px;
 }
 
 .chat-right{
   flex-grow: 1;
   background-color: #999;
+  max-width: 350px;
 }
 
 .chat-body{
