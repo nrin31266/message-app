@@ -35,6 +35,7 @@
 
 .chat-container {
   display: flex;
+  height: 100vh;
 }
 
 .chat-left{
@@ -46,11 +47,23 @@
 .chat-right{
   flex-grow: 1;
   background-color: #999;
-  max-width: 350px;
+  /* max-width: 350px; */
 }
 
 .chat-body{
   flex-grow: 2;
   background-color: #666;
+  min-width: 500px;
 }
 
+.user-item{
+  padding: 0.5rem;
+}
+
+.user-item:hover{
+  background-color: rgb(202, 197, 192, 0.2);
+}
+
+.list-user{
+  
+}
