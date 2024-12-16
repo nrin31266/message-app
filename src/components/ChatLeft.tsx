@@ -24,18 +24,19 @@ const ChatLeft = () => {
   };
 
   return (
-    <Box sx={{ height: "100%", position: "relative",  overflow: 'hidden', }}>
+    <>
       {/* Main Content */}
       <Box
         sx={{
           display: displayKey === "main" ? "block" : "none",
-          height: "100%",
+          height: '100%'
         }}
       >
-        <Box sx={{ display: "flex", p: 1}}>
+        {/* Header Section */}
+        <div className="p-1" style={{ display: "flex", height: '8%', alignItems: 'center' }}>
           <Button
             onClick={!isSearch ? handleOpenMenu : () => setIsSearch(false)}
-            sx={{ minWidth: 0 }}
+            sx={{ minWidth: 0,height: 'max-content' }}
           >
             {!isSearch ? (
               <MenuRoundedIcon sx={iconStyle} />
@@ -49,6 +50,7 @@ const ChatLeft = () => {
               backgroundColor: "#E8E8E8",
               borderRadius: 2,
               width: "100%",
+              height: '40px'
             }}
           >
             <Button disabled sx={{ minWidth: 0 }}>
@@ -60,8 +62,13 @@ const ChatLeft = () => {
               placeholder="Search"
             />
           </Box>
+        </div>
+
+        <Box sx={{height: '92%',}}>
+          <ChatLeftBody isSearch={isSearch} />
         </Box>
-        <ChatLeftBody isSearch={isSearch} />
+        
+        {/* Menu */}
         <Menu
           MenuListProps={{
             "aria-labelledby": "long-button",
@@ -81,7 +88,7 @@ const ChatLeft = () => {
       >
         <Box>hihi</Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

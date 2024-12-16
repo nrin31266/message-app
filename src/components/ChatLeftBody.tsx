@@ -10,17 +10,17 @@ interface Props {
 const ChatLeftBody = ({ isSearch }: Props) => {
   return (
     <>
-      <Box
+      <div
         role="tabpanel"
-        hidden={isSearch} // Ẩn nếu đang ở chế độ tìm kiếm
-        sx={{ width: "100%", height: "100%", overflowY: 'auto'}}
+        hidden={isSearch} 
+        className="list-users"
       >
         <ChatLeftUsers />
-      </Box>
+      </div>
       <Box
         role="tabpanel"
-        hidden={!isSearch} // Ẩn nếu không ở chế độ tìm kiếm
-        sx={{ width: "100%", height: "100%" }}
+        hidden={!isSearch}
+        sx={{ width: "100%", height: "100%", }}
       >
         <ChatLeftSearchComponent />
       </Box>
