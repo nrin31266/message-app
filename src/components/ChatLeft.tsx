@@ -28,7 +28,7 @@ const ChatLeft = () => {
       debounceTimer.current = setTimeout(() => {
         console.log('Searching for:', query);
         setKeyword(query);
-      }, 600); // Thời gian chờ sau khi dừng gõ
+      }, 300); // Thời gian chờ sau khi dừng gõ
     } else {
       setKeyword(""); // Nếu không có query thì reset keyword
     }
@@ -54,6 +54,8 @@ const ChatLeft = () => {
     setKeyword(""); 
     setQuery(""); // Reset state query
   };
+
+  
 
   return (
     <>
