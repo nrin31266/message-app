@@ -1,9 +1,10 @@
+import { User } from "@/models/UserModel";
 import { Avatar } from "@mui/material";
 import React from "react";
 
 interface Props {
   onClick: (user: any) => void;
-  user: any;
+  user: User;
   isSelected: boolean;
 }
 
@@ -18,8 +19,8 @@ const UserItem = (props: Props) => {
       style={{ width: "100%", backgroundColor: isSelected ? "lightblue" : "", borderRadius: 10, padding: '10px'}}
     >
       <Avatar sx={{ width: "60px", height: "60px" }} />
-      <div>
-        <h5>Name user</h5>
+      <div className="ml-2">
+        <h6>{user.profile.firstName + " "+ user.profile.lastName + " (" + user.username + ")"}</h6>
       </div>
     </div>
   );

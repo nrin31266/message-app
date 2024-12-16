@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import SearchIcon from "@mui/icons-material/Search";
@@ -15,9 +15,9 @@ const ChatLeft = () => {
   const open = Boolean(anchorEl);
   const [displayKey, setDisplayKey] = useState<"main" | "sitting">("main");
   const [isSearch, setIsSearch] = useState(false);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [keyword, setKeyword] = useState("");
-
+  const inputSearchRef = useRef<HTMLInputElement>(null);
 
   // Sử dụng useRef để lưu trữ giá trị của debounceTimer
   const debounceTimer = React.useRef<NodeJS.Timeout | null>(null);
@@ -29,6 +29,8 @@ const ChatLeft = () => {
         console.log('Searching for:', query);
         setKeyword(query);
       }, 600); // Thời gian chờ sau khi dừng gõ
+    } else {
+      setKeyword(""); // Nếu không có query thì reset keyword
     }
     return () => {
       // Hủy bỏ timer khi người dùng tiếp tục nhập
@@ -37,6 +39,7 @@ const ChatLeft = () => {
       }
     };
   }, [query]); // Chạy lại khi `query` thay đổi
+  
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -44,6 +47,12 @@ const ChatLeft = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleSearchReset = () => {
+    setIsSearch(false); 
+    setKeyword(""); 
+    setQuery(""); // Reset state query
   };
 
   return (
@@ -61,7 +70,11 @@ const ChatLeft = () => {
           style={{ display: "flex", height: "8%", alignItems: "center" }}
         >
           <Button
-            onClick={!isSearch ? handleOpenMenu : () => setIsSearch(false)}
+            onClick={
+              !isSearch
+                ? handleOpenMenu
+                : handleSearchReset
+            }
             sx={{ minWidth: 0, height: "max-content" }}
           >
             {!isSearch ? (
@@ -83,11 +96,13 @@ const ChatLeft = () => {
               <SearchIcon />
             </Button>
             <InputBase
+              ref={inputSearchRef}
               onFocus={() => setIsSearch(true)}
               sx={{ width: "100%" }}
               placeholder="Search"
-              onChange={(e) => setQuery(e.target.value)} 
+              onChange={(e) => setQuery(e.target.value)}
               size="medium"
+              value={query || ""}
             />
           </Box>
         </div>
@@ -106,7 +121,13 @@ const ChatLeft = () => {
           onClose={handleClose}
         >
           <MenuItem>Profile</MenuItem>
-          <MenuItem onClick={()=>{setDisplayKey("sitting");}}>Sitting</MenuItem>
+          <MenuItem
+            onClick={() => {
+              setDisplayKey("sitting");
+            }}
+          >
+            Sitting
+          </MenuItem>
         </Menu>
       </Box>
 
@@ -117,7 +138,7 @@ const ChatLeft = () => {
           height: "100%",
         }}
       >
-        <SittingComponent onClose={()=>setDisplayKey("main")}/>
+        <SittingComponent onClose={() => setDisplayKey("main")} />
       </Box>
     </>
   );

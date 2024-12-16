@@ -26,3 +26,14 @@ export interface MyInfo {
     description: any
     permissions: any[]
   }
+
+  export interface User {
+    id: string
+    username: string
+    email: string
+    profile: Profile
+    enabled: boolean
+    createdAt: string
+    updatedAt: any
+    roles: Role[]
+  }
