@@ -65,23 +65,18 @@ const Chat = ({ user, onBack }: Props) => {
               {/* Nội dung chat sẽ được hiển thị ở đây */}
             </div>
             {/* Input Bottom */}
-            <div
-              className="chat-bottom ml-3 mr-3 mb-2"
-              style={{ flexShrink: 0 }}
-            >
+            <div className="chat-bottom mb-2" style={{ flexShrink: 0 }}>
               <div
                 className="d-flex"
                 style={{
                   alignItems: "center",
-                  justifyContent: "center",
-                  width: "100%",
                   gap: "0.5rem",
+                  justifyContent: "center",
                 }}
               >
                 <div
-                  className="d-flex p-2"
+                  className="d-flex p-2 sender-content"
                   style={{
-                    width: "100%",
                     backgroundColor: "#ffffff",
                     borderRadius: 20,
                     gap: "6px",
@@ -97,13 +92,12 @@ const Chat = ({ user, onBack }: Props) => {
                     type="text"
                     className="input-message"
                     style={{
-                      flex: "1",
                       padding: "8px",
-                      width: "100%",
                       border: "none",
+                      minWidth: 0,
                     }}
                     placeholder="Type your message"
-                  ></input>
+                  />
                   <Button sx={{ minWidth: 0 }} className="custom-button-1">
                     {<AttachFileRoundedIcon className="icon" />}
                   </Button>

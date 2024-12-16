@@ -16,6 +16,15 @@
 }
 
 
+.sender-content{
+  flex: 0.9;
+}
+
+.input-message{
+  flex: 1;
+}
+
+
 
 .custom-scrollbar::-webkit-scrollbar{
   width: 8px;
@@ -36,6 +45,8 @@
 .chat-container {
   display: flex;
   height: 100vh;
+  /* overflow-x: hidden; */
+  overflow-y: hidden;
 }
 
 .chat-left{
@@ -51,7 +62,6 @@
 
 .chat-body{
   flex-grow: 2;
-  min-width: 500px;
 }
 
 .user-item{

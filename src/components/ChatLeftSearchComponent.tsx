@@ -96,6 +96,7 @@ const ChatLeftSearchComponent = ({ keyword, onClickUser }: Props) => {
       ) : (
         <>
           <div
+          className="pl-2 pr-2"
             onScroll={handleScroll} // Đảm bảo theo dõi sự kiện cuộn
             style={{ height: "100%", overflowY: "auto", width: "100%" }}
           >
