@@ -9,9 +9,10 @@ import UserItem from "./UserItem";
 
 interface Props {
   keyword: string;
+  onClickUser: (user: User)=>void
 }
 
-const ChatLeftSearchComponent = ({ keyword }: Props) => {
+const ChatLeftSearchComponent = ({ keyword, onClickUser }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [globalDataSearch, setGlobalDataSearch] = useState<PageRes<User>>();
   const [page, setPage] = useState(1); // Lưu trữ trang hiện tại
@@ -69,6 +70,10 @@ const ChatLeftSearchComponent = ({ keyword }: Props) => {
     }
   };
 
+  const handleOnClickItem = (user: User)=>{
+    console.log(user);
+    onClickUser(user);
+  }
 
 
   return (
@@ -98,7 +103,7 @@ const ChatLeftSearchComponent = ({ keyword }: Props) => {
               <UserItem
                 key={user.id}
                 isSelected={false}
-                onClick={() => {}}
+                onClick={(v) => handleOnClickItem(v)}
                 user={user}
               />
             ))}

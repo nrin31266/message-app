@@ -4,13 +4,15 @@ import React, { useEffect } from "react";
 import { Box } from "@mui/material";
 import ChatLeftUsers from "./ChatLeftUsers";
 import ChatLeftSearchComponent from "./ChatLeftSearchComponent";
+import { User } from "@/models/UserModel";
 
 interface Props {
   isSearch: boolean;
   keyword: string;
+  onClickUser: (user:User)=>void
 }
 
-const ChatLeftBody = ({ isSearch, keyword }: Props) => {
+const ChatLeftBody = ({ isSearch, keyword, onClickUser }: Props) => {
   return (
     <>
       <div
@@ -21,7 +23,7 @@ const ChatLeftBody = ({ isSearch, keyword }: Props) => {
         <ChatLeftUsers />
       </div>
       {
-        isSearch && <ChatLeftSearchComponent keyword={keyword} />
+        isSearch && <ChatLeftSearchComponent onClickUser={(v)=>onClickUser(v)} keyword={keyword} />
       }
       
     </>

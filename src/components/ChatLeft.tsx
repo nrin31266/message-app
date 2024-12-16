@@ -7,10 +7,15 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Button, InputBase, Menu, Box, MenuItem } from "@mui/material";
 import ChatLeftBody from "./ChatLeftBody";
 import SittingComponent from "./SittingComponent";
+import { User } from "@/models/UserModel";
 
 const iconStyle = { fontSize: "2rem" };
 
-const ChatLeft = () => {
+interface Props{
+  onClickUser: (user: User)=>void
+}
+
+const ChatLeft = ({onClickUser}:Props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [displayKey, setDisplayKey] = useState<"main" | "sitting">("main");
@@ -55,6 +60,9 @@ const ChatLeft = () => {
     setQuery(""); // Reset state query
   };
 
+  const handleOnClickUser = (user:User)=>{
+    onClickUser(user);
+  }
   
 
   return (
@@ -110,7 +118,7 @@ const ChatLeft = () => {
         </div>
 
         <Box sx={{ height: "92%" }}>
-          <ChatLeftBody keyword={keyword} isSearch={isSearch} />
+          <ChatLeftBody onClickUser={(v)=>handleOnClickUser(v)} keyword={keyword} isSearch={isSearch} />
         </Box>
 
         {/* Menu */}

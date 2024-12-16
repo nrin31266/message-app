@@ -3,7 +3,7 @@ import { Avatar } from "@mui/material";
 import React from "react";
 
 interface Props {
-  onClick: (user: any) => void;
+  onClick: (user: User) => void;
   user: User;
   isSelected: boolean;
 }

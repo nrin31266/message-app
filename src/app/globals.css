@@ -51,7 +51,6 @@
 
 .chat-body{
   flex-grow: 2;
-  background-color: #666;
   min-width: 500px;
 }
 
@@ -69,4 +68,29 @@
   overflow-y: auto;
   padding-left: 10px;
   padding-right: 5px;
+}
+
+
+.custom-button-1 .icon{
+  font-size: 30px;
+}
+
+.MuiButton-root:focus {
+  outline: none; /* Tắt viền focus */
+}
+
+.input-message:focus{
+  outline: none;
+}
+
+.custom-button-1:hover {
+  background-color: white;
+}
+
+.send-button .icon{
+  font-size: 30px;
+}
+
+.send-button:hover{
+  background-color: rgba(248, 224, 197, 0.541);
 }
