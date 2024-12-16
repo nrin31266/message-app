@@ -1,13 +1,16 @@
-import React from "react";
+"use client"
+
+import React, { useEffect } from "react";
 import { Box } from "@mui/material";
 import ChatLeftUsers from "./ChatLeftUsers";
 import ChatLeftSearchComponent from "./ChatLeftSearchComponent";
 
 interface Props {
   isSearch: boolean;
+  keyword: string;
 }
 
-const ChatLeftBody = ({ isSearch }: Props) => {
+const ChatLeftBody = ({ isSearch, keyword }: Props) => {
   return (
     <>
       <div
@@ -17,13 +20,10 @@ const ChatLeftBody = ({ isSearch }: Props) => {
       >
         <ChatLeftUsers />
       </div>
-      <Box
-        role="tabpanel"
-        hidden={!isSearch}
-        sx={{ width: "100%", height: "100%", }}
-      >
-        <ChatLeftSearchComponent />
-      </Box>
+      {
+        isSearch && <ChatLeftSearchComponent keyword={keyword} />
+      }
+      
     </>
   );
 };

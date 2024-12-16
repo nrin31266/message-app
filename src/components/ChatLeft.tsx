@@ -16,6 +16,7 @@ const ChatLeft = () => {
   const [displayKey, setDisplayKey] = useState<"main" | "sitting">("main");
   const [isSearch, setIsSearch] = useState(false);
   const [query, setQuery] = useState('');
+  const [keyword, setKeyword] = useState("");
 
 
   // Sử dụng useRef để lưu trữ giá trị của debounceTimer
@@ -26,7 +27,8 @@ const ChatLeft = () => {
       // Thiết lập debounce timer
       debounceTimer.current = setTimeout(() => {
         console.log('Searching for:', query);
-      }, 500); // Thời gian chờ 500ms sau khi dừng gõ
+        setKeyword(query);
+      }, 600); // Thời gian chờ sau khi dừng gõ
     }
     return () => {
       // Hủy bỏ timer khi người dùng tiếp tục nhập
@@ -85,12 +87,13 @@ const ChatLeft = () => {
               sx={{ width: "100%" }}
               placeholder="Search"
               onChange={(e) => setQuery(e.target.value)} 
+              size="medium"
             />
           </Box>
         </div>
 
         <Box sx={{ height: "92%" }}>
-          <ChatLeftBody isSearch={isSearch} />
+          <ChatLeftBody keyword={keyword} isSearch={isSearch} />
         </Box>
 
         {/* Menu */}
