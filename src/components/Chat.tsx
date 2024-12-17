@@ -1,7 +1,7 @@
 "use client";
 import { User } from "@/models/UserModel";
 import { Avatar, Button, Divider } from "@mui/material";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import KeyboardVoiceRoundedIcon from "@mui/icons-material/KeyboardVoiceRounded";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
@@ -18,6 +18,20 @@ const Chat = ({ user, onBack }: Props) => {
     onBack();
   };
   const [message, setMessage] = useState("");
+  const messageInputRef = useRef<HTMLTextAreaElement>(null);
+  // Hàm dùng chung cho cả Enter và Send Button
+  const handleSendMessage = () => {
+    if (message.trim()) {
+      console.log("Message sent:", message);
+      setMessage(""); // Reset lại message sau khi gửi
+
+      // Reset lại chiều cao của textarea
+      if (messageInputRef.current) {
+        messageInputRef.current.style.height = "auto"; // Đặt lại chiều cao ban đầu
+        messageInputRef.current.focus();
+      }
+    }
+  };
 
   return (
     <div
@@ -51,7 +65,7 @@ const Chat = ({ user, onBack }: Props) => {
           <Divider />
           <div
             style={{
-              backgroundColor: "#F4F3F3",
+              backgroundImage: "url('/assets/back.png')", 
               display: "flex",
               flexDirection: "column",
               height: "92%",
@@ -63,7 +77,6 @@ const Chat = ({ user, onBack }: Props) => {
               style={{
                 flexGrow: 1,
                 overflowY: "auto",
-                backgroundColor: "#e0e0e0",
               }}
             >
               {/* Nội dung chat sẽ được hiển thị ở đây */}
@@ -98,6 +111,7 @@ const Chat = ({ user, onBack }: Props) => {
                     </Button>
                   </div>
                   <textarea
+                  ref={messageInputRef}
                     rows={1}
                     onChange={(e) => setMessage(e.target.value)}
                     value={message}
@@ -119,6 +133,12 @@ const Chat = ({ user, onBack }: Props) => {
                         150
                       )}px`; // Giới hạn chiều cao tối đa
                     }}
+                    onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault(); // Ngăn chặn hành động mặc định (thêm dòng mới)
+                        handleSendMessage(); // Gọi hàm gửi tin nhắn
+                      }
+                    }}
                   />
 
                   <div className="d-flex" style={{ alignItems: "end" }}>
@@ -136,6 +156,11 @@ const Chat = ({ user, onBack }: Props) => {
                       borderRadius: 100,
                     }}
                     className="send-button"
+                    onClick={()=>{
+                      if(message){
+                        handleSendMessage();
+                      }
+                    }}
                   >
                     {message.length > 0 ? (
                       <SendRoundedIcon className="icon" />
