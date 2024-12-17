@@ -60,18 +60,25 @@ const Chat = ({ user, onBack }: Props) => {
             {/* Content */}
             <div
               className="chat-content"
-              style={{ flexGrow: 1, overflowY: "auto" }}
+              style={{
+                flexGrow: 1,
+                overflowY: "auto",
+                backgroundColor: "#e0e0e0",
+              }}
             >
               {/* Nội dung chat sẽ được hiển thị ở đây */}
             </div>
             {/* Input Bottom */}
-            <div className="chat-bottom mb-2" style={{ flexShrink: 0 }}>
+            <div className="chat-bottom mb-2 mt-2" style={{ flexShrink: 0 }}>
               <div
                 className="d-flex"
                 style={{
-                  alignItems: "center",
                   gap: "0.5rem",
                   justifyContent: "center",
+                  // maxHeight: '20rem',
+                  // height: '100%'
+                  // position: "sticky",
+                  // bottom: 0,
                 }}
               >
                 <div
@@ -82,41 +89,61 @@ const Chat = ({ user, onBack }: Props) => {
                     gap: "6px",
                   }}
                 >
-                  <Button sx={{ minWidth: 0 }} className="custom-button-1">
-                    {<SentimentSatisfiedOutlinedIcon className="icon" />}
-                  </Button>
-                  <input
-                    // ref={messageInputRef}
+                  <div className="d-flex" style={{ alignItems: "end" }}>
+                    <Button
+                      sx={{ minWidth: 0, alignItems: "end" }}
+                      className="custom-button-1"
+                    >
+                      {<SentimentSatisfiedOutlinedIcon className="icon" />}
+                    </Button>
+                  </div>
+                  <textarea
+                    rows={1}
                     onChange={(e) => setMessage(e.target.value)}
                     value={message}
-                    type="text"
                     className="input-message"
+                    placeholder="Type your message"
                     style={{
                       padding: "8px",
                       border: "none",
-                      minWidth: 0,
+                      height: "auto",
+                      resize: "none",
+                      overflowY: "auto", // Hiển thị thanh cuộn khi vượt quá maxHeight
+                      boxSizing: "border-box", // Đảm bảo padding không phá layout
                     }}
-                    placeholder="Type your message"
+                    onInput={(e: React.FormEvent<HTMLTextAreaElement>) => {
+                      const target = e.currentTarget; // Đảm bảo TypeScript hiểu đúng kiểu của target
+                      target.style.height = "auto"; // Reset chiều cao về auto trước
+                      target.style.height = `${Math.min(
+                        target.scrollHeight,
+                        150
+                      )}px`; // Giới hạn chiều cao tối đa
+                    }}
                   />
-                  <Button sx={{ minWidth: 0 }} className="custom-button-1">
-                    {<AttachFileRoundedIcon className="icon" />}
+
+                  <div className="d-flex" style={{ alignItems: "end" }}>
+                    <Button sx={{ minWidth: 0 }} className="custom-button-1">
+                      {<AttachFileRoundedIcon className="icon" />}
+                    </Button>
+                  </div>
+                </div>
+                <div className="d-flex" style={{ alignItems: "end" }}>
+                  <Button
+                    sx={{
+                      minWidth: 0,
+                      backgroundColor: "white",
+                      padding: "14px",
+                      borderRadius: 100,
+                    }}
+                    className="send-button"
+                  >
+                    {message.length > 0 ? (
+                      <SendRoundedIcon className="icon" />
+                    ) : (
+                      <KeyboardVoiceRoundedIcon className="icon" />
+                    )}
                   </Button>
                 </div>
-                <Button
-                  sx={{
-                    minWidth: 0,
-                    backgroundColor: "white",
-                    padding: "14px",
-                    borderRadius: 100,
-                  }}
-                  className="send-button"
-                >
-                  {message.length > 0 ? (
-                    <SendRoundedIcon className="icon" />
-                  ) : (
-                    <KeyboardVoiceRoundedIcon className="icon" />
-                  )}
-                </Button>
               </div>
             </div>
           </div>
