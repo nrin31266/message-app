@@ -7,6 +7,8 @@ import KeyboardVoiceRoundedIcon from "@mui/icons-material/KeyboardVoiceRounded";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import AttachFileRoundedIcon from "@mui/icons-material/AttachFileRounded";
 import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
+import ChatItem from "./ChatItem";
+import ChatBody from "./ChatBody";
 
 interface Props {
   user: User | undefined;
@@ -77,9 +79,13 @@ const Chat = ({ user, onBack }: Props) => {
               style={{
                 flexGrow: 1,
                 overflowY: "auto",
+                width: '100%',
+                display:'flex',
+                flexDirection: 'column-reverse',
+                
               }}
             >
-              {/* Nội dung chat sẽ được hiển thị ở đây */}
+              <ChatBody/>
             </div>
             {/* Input Bottom */}
             <div className="chat-bottom mb-2 mt-2" style={{ flexShrink: 0 }}>
