@@ -3,46 +3,45 @@ import React from "react";
 
 // Interface cho props
 interface Props {
-  chat: any;
-  // isLastMessage: boolean; // Kiểm tra nếu là tin nhắn cuối
-  isDifferentSender: boolean; // Kiểm tra nếu là người gửi khác
+  chat: any
+  isMyMes: boolean;
 }
 
-const ChatItem = ({ chat, isDifferentSender }: Props) => {
-
+const ChatItem = ({ chat, isMyMes }: Props) => {
   return (
     <div
       className="chat-item"
       style={{
         display: "flex",
-        justifyContent: chat.senderId === "user1" ? "flex-end" : "flex-start", // Căn chỉnh tin nhắn người gửi bên phải
+        alignSelf: isMyMes ? "flex-end" : "flex-start", // Dùng flex-end và flex-start chuẩn hơn
         marginBottom: "10px",
+        maxWidth: "75%", // Đảm bảo tin nhắn không chiếm hết chiều ngang
+        wordWrap: "break-word",
+        whiteSpace: "normal", // Đảm bảo tin nhắn sẽ ngắt dòng nếu cần
+        overflowWrap: "break-word", // Đảm bảo ngắt dòng nếu cần
+        wordBreak: "break-all",
+        width: "fit-content",
       }}
     >
-      {/* Hiển thị avatar cho tin nhắn đầu tiên của người gửi trong nhóm */}
-      {isDifferentSender && (
+      {/* Avatar hiển thị chỉ khi không phải tin nhắn của mình */}
+      {!isMyMes && (
         <Avatar
-          sx={{
-            width: 40,
-            height: 40,
-            marginRight: "10px",
-            backgroundColor: "#3f51b5",
-          }}
-        >
-          {chat.senderName[0]}
-        </Avatar>
+          sx={{ width: 44, height: 44, marginRight: "10px" }}
+          alt={chat.senderName}
+        />
       )}
 
       <div
         style={{
-          backgroundColor: "#f1f1f1",
+          backgroundColor: isMyMes ? "#d1ffd6" : "#f1f1f1", // Đổi màu nền dựa trên tin nhắn
           padding: "10px",
           borderRadius: "10px",
           position: "relative",
+          width: "fit-content",
         }}
       >
-        <strong>{chat.senderName}</strong>
-        <p>{chat.text}</p>
+        <p style={{ margin: "5px 0" }}>{chat.text + 'dasssssssssssss sssssssst errrrrrrrrrrrrr rrrrrrrrrrrrrrrrrrr rrrweffffff fffffffffffffffff fffffffffffffff'}</p>
+        <small style={{ fontSize: "0.75rem", color: "#888" }}>{chat.created}</small>
       </div>
     </div>
   );

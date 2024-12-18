@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import ChatItem from "./ChatItem";
+import { User } from "@/models/UserModel";
+import { useSelector } from "react-redux";
+import { userSelector } from "@/redux/userSlice";
 
 // Interface cho dữ liệu giả
 interface FakeChat {
@@ -11,14 +14,15 @@ interface FakeChat {
 }
 
 const ChatBody = () => {
+  const user: User = useSelector(userSelector);
   // Dữ liệu giả
   const [chats, setChats] = useState<FakeChat[]>([
     // Ngày hiện tại
     {
       id: "1",
       text: "Hello, how are you?",
-      senderId: "user1",
-      senderName: "User 1",
+      senderId: "fde199f3-d8f0-470a-a972-65b319966386",
+      senderName: "User",
       created: Date.now() - 300000, // Tin nhắn cách hiện tại 5 phút
     },
     {
@@ -38,8 +42,8 @@ const ChatBody = () => {
     {
       id: "4",
       text: "Great to hear!",
-      senderId: "user2",
-      senderName: "User 2",
+      senderId: "fde199f3-d8f0-470a-a972-65b319966386",
+      senderName: "User",
       created: Date.now() - 60000, // Tin nhắn cách hiện tại 1 phút
     },
     {
@@ -83,24 +87,12 @@ const ChatBody = () => {
     },
   ]);
 
-  // const groupByDate = (chats: FakeChat[]) => {
-  //   const groupedChats: { [key: string]: FakeChat[] } = {};
-  //   chats.forEach((chat) => {
-  //     const date = new Date(chat.created).toLocaleDateString();
-  //     if (!groupedChats[date]) {
-  //       groupedChats[date] = [];
-  //     }
-  //     groupedChats[date].push(chat);
-  //   });
-  //   return groupedChats;
-  // };
 
-  // const groupedChats = groupByDate(chats);
 
   return (
     <>
       {chats.map((chat, index)=><ChatItem
-        chat={chat} isDifferentSender={chat.id === "user1"} key={chat.id}
+        chat={chat} key={chat.id} isMyMes={user.id === chat.senderId? true : false}
       />)}
       
     </>

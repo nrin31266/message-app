@@ -82,7 +82,6 @@ const Chat = ({ user, onBack }: Props) => {
                 width: '100%',
                 display:'flex',
                 flexDirection: 'column-reverse',
-                
               }}
             >
               <ChatBody/>
