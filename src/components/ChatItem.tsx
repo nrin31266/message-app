@@ -4,15 +4,11 @@ import React from "react";
 // Interface cho props
 interface Props {
   chat: any;
-  isLastMessage: boolean; // Kiểm tra nếu là tin nhắn cuối
+  // isLastMessage: boolean; // Kiểm tra nếu là tin nhắn cuối
   isDifferentSender: boolean; // Kiểm tra nếu là người gửi khác
 }
 
-const ChatItem = ({ chat, isLastMessage, isDifferentSender }: Props) => {
-  const formatDate = (timestamp: number) => {
-    const date = new Date(timestamp);
-    return `${date.getHours()}:${date.getMinutes() < 10 ? "0" : ""}${date.getMinutes()}`;
-  };
+const ChatItem = ({ chat, isDifferentSender }: Props) => {
 
   return (
     <div
@@ -47,21 +43,6 @@ const ChatItem = ({ chat, isLastMessage, isDifferentSender }: Props) => {
       >
         <strong>{chat.senderName}</strong>
         <p>{chat.text}</p>
-
-        {/* Hiển thị thời gian gửi chỉ cho tin nhắn cuối cùng */}
-        {isLastMessage && (
-          <span
-            style={{
-              position: "absolute",
-              bottom: "-18px",
-              right: "0",
-              fontSize: "12px",
-              color: "#888",
-            }}
-          >
-            {formatDate(chat.created)}
-          </span>
-        )}
       </div>
     </div>
   );

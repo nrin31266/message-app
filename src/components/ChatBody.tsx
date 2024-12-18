@@ -83,48 +83,27 @@ const ChatBody = () => {
     },
   ]);
 
-  const groupByDate = (chats: FakeChat[]) => {
-    const groupedChats: { [key: string]: FakeChat[] } = {};
-    chats.forEach((chat) => {
-      const date = new Date(chat.created).toLocaleDateString();
-      if (!groupedChats[date]) {
-        groupedChats[date] = [];
-      }
-      groupedChats[date].push(chat);
-    });
-    return groupedChats;
-  };
+  // const groupByDate = (chats: FakeChat[]) => {
+  //   const groupedChats: { [key: string]: FakeChat[] } = {};
+  //   chats.forEach((chat) => {
+  //     const date = new Date(chat.created).toLocaleDateString();
+  //     if (!groupedChats[date]) {
+  //       groupedChats[date] = [];
+  //     }
+  //     groupedChats[date].push(chat);
+  //   });
+  //   return groupedChats;
+  // };
 
-  const groupedChats = groupByDate(chats);
+  // const groupedChats = groupByDate(chats);
 
   return (
-    <div>
-      {Object.keys(groupedChats).map((date) => (
-        <div key={date}>
-          <div
-            style={{
-              textAlign: "center",
-              margin: "10px 0",
-              color: "#aaa",
-              fontSize: "14px",
-            }}
-          >
-            {/* Thanh phân cách ngày */}
-            {date}
-          </div>
-          {groupedChats[date].map((chat, index) => (
-            <ChatItem
-              key={chat.id}
-              chat={chat}
-              isLastMessage={index === groupedChats[date].length - 1}
-              isDifferentSender={
-                index === 0 || chat.senderId !== groupedChats[date][index - 1].senderId
-              }
-            />
-          ))}
-        </div>
-      ))}
-    </div>
+    <>
+      {chats.map((chat, index)=><ChatItem
+        chat={chat} isDifferentSender={chat.id === "user1"} key={chat.id}
+      />)}
+      
+    </>
   );
 };
 

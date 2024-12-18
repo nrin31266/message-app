@@ -40,7 +40,7 @@ const LoginPage = () => {
         values,
         "post"
       );
-      setCookie("token", res.result.token);
+      setCookie("token", res.result.token, {maxAge: 60*60*24*7});
       const resInfo: any = await handleApi(`${GLOBAL_API.PROFILE}/my-info`);
       console.log(resInfo);
       dispatch(setUser(resInfo.result));

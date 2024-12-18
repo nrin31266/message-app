@@ -1,6 +1,6 @@
 "use client";
 
-import { colors } from "@/constant/globleConstant";
+import { colors } from "@/constant/globalConstant";
 import { Card } from "@mui/material";
 import { usePathname } from "next/navigation";
 import React from "react";

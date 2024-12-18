@@ -50,7 +50,7 @@
 }
 
 .chat-left{
-  min-width: 400px;
+  flex-grow: 1;
   height: 100vh;
 }
 
