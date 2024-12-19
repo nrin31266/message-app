@@ -1,6 +1,6 @@
 "useClient";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ChatItem from "./ChatItem";
 import { User } from "@/models/UserModel";
 import { useSelector } from "react-redux";
@@ -14,7 +14,7 @@ import handleApi from "@/config/handleApi";
 
 interface Props {
   userSelected: User;
-  newMessage?: Message
+  newMessage?: Message;
 }
 
 const ChatBody = ({ userSelected, newMessage }: Props) => {
@@ -22,11 +22,12 @@ const ChatBody = ({ userSelected, newMessage }: Props) => {
   const [messagePage, setMessagePage] = useState<PageRes<Message>>();
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const divRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if(newMessage && messagePage !== undefined){
+    if (newMessage && messagePage !== undefined) {
       setMessagePage((prev) => ({
-        data: [newMessage, ...prev?.data || []],
+        data: [newMessage, ...(prev?.data || [])],
         currentPage: prev?.currentPage ?? 1, // Giữ nguyên currentPage nếu có hoặc mặc định 1
         totalPages: prev?.totalPages ?? 1, // Giữ nguyên totalPages nếu có hoặc mặc định 1
         pageSize: prev?.pageSize ?? 10, // Giữ nguyên pageSize nếu có hoặc mặc định 10
@@ -34,12 +35,15 @@ const ChatBody = ({ userSelected, newMessage }: Props) => {
       }));
     }
   }, [newMessage]);
-  
 
   useEffect(() => {
-    if (userSelected && page === 1) {
+    if (userSelected) {
+      if (divRef.current) {
+        divRef.current.scrollTop = 0; // Cuộn đến vị trí cụ thể
+      }
       getMessages(1);
     }
+    setPage(1);
   }, [userSelected]);
 
   const getMessages = async (pageR?: number) => {
@@ -69,21 +73,35 @@ const ChatBody = ({ userSelected, newMessage }: Props) => {
 
   useEffect(() => {
     if (page > 1) {
+      getMessages();
     }
   }, [page]);
 
-  // Hàm để kiểm tra khi người dùng cuộn đến cuối
   const handleScroll = (e: React.UIEvent<HTMLElement>) => {
-    const bottom =
-      e.currentTarget.scrollHeight ===
-      e.currentTarget.scrollTop + e.currentTarget.clientHeight;
-    if (bottom && !isLoading && messagePage && messagePage.data.length > 0) {
-      setPage((prevPage) => prevPage + 1); // Tăng số trang lên và gọi lại API
+    const top =
+      e.currentTarget.scrollHeight - 5 <
+      -e.currentTarget.scrollTop + e.currentTarget.clientHeight;
+    console.log(-e.currentTarget.scrollTop + e.currentTarget.clientHeight);
+
+    console.log("scrollTop:", e.currentTarget.scrollTop);
+    console.log("scrollHeight:", e.currentTarget.scrollHeight);
+    console.log("clientHeight:", e.currentTarget.clientHeight);
+
+    // Kiểm tra nếu cuộn đến cuối và chưa đang tải dữ liệu
+    if (
+      top &&
+      !isLoading &&
+      messagePage &&
+      messagePage.data.length > 0 &&
+      page < messagePage.totalPages
+    ) {
+      setPage((prevPage) => prevPage + 1); // Gọi API để tải thêm tin nhắn
     }
   };
 
   return (
     <div
+      ref={divRef}
       onScroll={handleScroll}
       className="chat-content"
       style={{
@@ -94,16 +112,11 @@ const ChatBody = ({ userSelected, newMessage }: Props) => {
         flexDirection: "column-reverse",
       }}
     >
-      {isLoading && (
-        <div>
-          <CircularProgress />
-        </div>
-      )}
       {messagePage && messagePage.data.length > 0 ? (
         <>
           {messagePage.data.map((message, index) => (
             <ChatItem
-              chat={message}
+              message={message}
               key={index}
               isMyMes={user.id === message.senderId ? true : false}
             />
@@ -111,6 +124,11 @@ const ChatBody = ({ userSelected, newMessage }: Props) => {
         </>
       ) : (
         <>chat now</>
+      )}
+      {isLoading && (
+        <div style={{ width: "100%", justifyContent: "center", display: 'flex', paddingTop: '20px' }}>
+          <CircularProgress />
+        </div>
       )}
     </div>
   );

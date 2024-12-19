@@ -1,22 +1,17 @@
 "use client"
 
-import { Message } from "@/models/MessageModel";
+import { Message, Status } from "@/models/MessageModel";
 import { formatDate } from "@/utils/time";
 import { Avatar } from "@mui/material";
 import React, { useEffect } from "react";
 
 // Interface cho props
 interface Props {
-  chat: Message
+  message: Message
   isMyMes: boolean;
 }
 
-const ChatItem = ({ chat, isMyMes }: Props) => {
-
-  useEffect(() => {
-    
-  }, []);
-
+const ChatItem = ({ message, isMyMes }: Props) => {
 
   return (
     <div
@@ -37,7 +32,7 @@ const ChatItem = ({ chat, isMyMes }: Props) => {
       {!isMyMes && (
         <Avatar
           sx={{ width: 44, height: 44, marginRight: "10px" }}
-          alt={chat.senderId}
+          alt={message.senderId}
         />
       )}
 
@@ -50,8 +45,8 @@ const ChatItem = ({ chat, isMyMes }: Props) => {
           width: "fit-content",
         }}
       >
-        <p style={{ margin: "5px 0" }}>{chat.content}</p>
-        <small style={{ fontSize: "0.75rem", color: "#888" }}>{formatDate(chat.createdAt)}</small>
+        <p style={{ margin: "5px 0" }}>{message.content}</p>
+        <small style={{ fontSize: "0.75rem", color: "#888" }}>{formatDate(message.createdAt)}</small>
       </div>
     </div>
   );
