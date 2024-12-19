@@ -1,9 +1,10 @@
+import { Message } from "@/models/MessageModel";
 import { Avatar } from "@mui/material";
 import React from "react";
 
 // Interface cho props
 interface Props {
-  chat: any
+  chat: Message
   isMyMes: boolean;
 }
 
@@ -27,7 +28,7 @@ const ChatItem = ({ chat, isMyMes }: Props) => {
       {!isMyMes && (
         <Avatar
           sx={{ width: 44, height: 44, marginRight: "10px" }}
-          alt={chat.senderName}
+          alt={chat.senderId}
         />
       )}
 
@@ -40,8 +41,8 @@ const ChatItem = ({ chat, isMyMes }: Props) => {
           width: "fit-content",
         }}
       >
-        <p style={{ margin: "5px 0" }}>{chat.text + 'dasssssssssssss sssssssst errrrrrrrrrrrrr rrrrrrrrrrrrrrrrrrr rrrweffffff fffffffffffffffff fffffffffffffff'}</p>
-        <small style={{ fontSize: "0.75rem", color: "#888" }}>{chat.created}</small>
+        <p style={{ margin: "5px 0" }}>{chat.content}</p>
+        <small style={{ fontSize: "0.75rem", color: "#888" }}>{chat.createdAt}</small>
       </div>
     </div>
   );

@@ -1,101 +1,104 @@
-import React, { useState } from "react";
+"useClient";
+
+import React, { useEffect, useState } from "react";
 import ChatItem from "./ChatItem";
 import { User } from "@/models/UserModel";
 import { useSelector } from "react-redux";
 import { userSelector } from "@/redux/userSlice";
+import { PageRes } from "@/models/AppModel";
+import { Message } from "@/models/MessageModel";
+import Page from "./../app/page";
+import { CircularProgress } from "@mui/material";
+import { GLOBAL_API } from "@/config/config";
+import handleApi from "@/config/handleApi";
 
-// Interface cho dữ liệu giả
-interface FakeChat {
-  id: string;
-  text: string;
-  senderId: string;
-  senderName: string;
-  created: number; // timestamp
+interface Props {
+  userSelected: User;
 }
 
-const ChatBody = () => {
+const ChatBody = ({ userSelected }: Props) => {
   const user: User = useSelector(userSelector);
-  // Dữ liệu giả
-  const [chats, setChats] = useState<FakeChat[]>([
-    // Ngày hiện tại
-    {
-      id: "1",
-      text: "Hello, how are you?",
-      senderId: "fde199f3-d8f0-470a-a972-65b319966386",
-      senderName: "User",
-      created: Date.now() - 300000, // Tin nhắn cách hiện tại 5 phút
-    },
-    {
-      id: "2",
-      text: "I'm good, and you?",
-      senderId: "user1",
-      senderName: "User 1",
-      created: Date.now() - 250000, // Tin nhắn cách hiện tại 4 phút
-    },
-    {
-      id: "3",
-      text: "I'm doing well, thanks for asking!",
-      senderId: "user2",
-      senderName: "User 2",
-      created: Date.now() - 150000, // Tin nhắn cách hiện tại 2 phút
-    },
-    {
-      id: "4",
-      text: "Great to hear!",
-      senderId: "fde199f3-d8f0-470a-a972-65b319966386",
-      senderName: "User",
-      created: Date.now() - 60000, // Tin nhắn cách hiện tại 1 phút
-    },
-    {
-      id: "5",
-      text: "Let's meet soon.",
-      senderId: "user1",
-      senderName: "User 1",
-      created: Date.now() - 1000000, // Tin nhắn cách hiện tại 17 phút
-    },
+  const [messagePage, setMessagePage] = useState<PageRes<Message>>();
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
-    // Ngày hôm qua (cách 1 ngày)
-    {
-      id: "6",
-      text: "Sure, I'll check my schedule.",
-      senderId: "user2",
-      senderName: "User 2",
-      created: Date.now() - 900000 - 86400000, // Tin nhắn cách hiện tại 1 ngày 15 phút
-    },
-    {
-      id: "7",
-      text: "What time works for you?",
-      senderId: "user1",
-      senderName: "User 1",
-      created: Date.now() - 800000 - 86400000, // Tin nhắn cách hiện tại 1 ngày 13 phút
-    },
+  useEffect(() => {
+    if (userSelected && page === 1) {
+      getMessages(1);
+    }
+  }, [userSelected]);
 
-    // Ngày hôm kia (cách 2 ngày)
-    {
-      id: "8",
-      text: "We should catch up sometime.",
-      senderId: "user2",
-      senderName: "User 2",
-      created: Date.now() - 900000 - 86400000 * 2, // Tin nhắn cách hiện tại 2 ngày 15 phút
-    },
-    {
-      id: "9",
-      text: "Yes, I agree.",
-      senderId: "user1",
-      senderName: "User 1",
-      created: Date.now() - 800000 - 86400000 * 2, // Tin nhắn cách hiện tại 2 ngày 13 phút
-    },
-  ]);
+  const getMessages = async (pageR?: number) => {
+    setIsLoading(true);
+    try {
+      const urlR = `${GLOBAL_API.MESSAGE}/chat?senderId=${user.id}&receiverId=${
+        userSelected.id
+      }&page=${pageR ?? page}`;
+      const res: any = await handleApi(urlR);
 
+      if (pageR === 1 || page === 1) {
+        setMessagePage(res.result);
+      } else {
+        setMessagePage((prevData) => ({
+          ...res.result,
+          data: [...(prevData?.data || []), ...res.result.data],
+        }));
+      }
 
+      console.log(res);
+    } catch (error: any) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (page > 1) {
+    }
+  }, [page]);
+
+  // Hàm để kiểm tra khi người dùng cuộn đến cuối
+  const handleScroll = (e: React.UIEvent<HTMLElement>) => {
+    const bottom =
+      e.currentTarget.scrollHeight ===
+      e.currentTarget.scrollTop + e.currentTarget.clientHeight;
+    if (bottom && !isLoading && messagePage && messagePage.data.length > 0) {
+      setPage((prevPage) => prevPage + 1); // Tăng số trang lên và gọi lại API
+    }
+  };
 
   return (
-    <>
-      {chats.map((chat, index)=><ChatItem
-        chat={chat} key={chat.id} isMyMes={user.id === chat.senderId? true : false}
-      />)}
-      
-    </>
+    <div
+      onScroll={handleScroll}
+      className="chat-content"
+      style={{
+        flexGrow: 1,
+        overflowY: "auto",
+        width: "100%",
+        display: "flex",
+        flexDirection: "column-reverse",
+      }}
+    >
+      {isLoading && (
+        <div>
+          <CircularProgress />
+        </div>
+      )}
+      {messagePage && messagePage.data.length > 0 ? (
+        <>
+          {messagePage.data.map((message, index) => (
+            <ChatItem
+              chat={message}
+              key={message.id}
+              isMyMes={user.id === message.senderId ? true : false}
+            />
+          ))}
+        </>
+      ) : (
+        <>chat now</>
+      )}
+    </div>
   );
 };
 

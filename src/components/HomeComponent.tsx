@@ -9,7 +9,6 @@ import Chat from "./Chat";
 const HomeComponent = () => {
   const router = useRouter();
   const myInfo: MyInfo = useSelector(userSelector);
-  console.log(myInfo);
   const [userSelected, setUserSelected] = useState<User>();
 
   return (

@@ -6,5 +6,6 @@ export const APP = {
 export const GLOBAL_API = {
     USER: '/users',
     PROFILE: "/profiles",
-    AUTHENTICATION: "/auth"
+    AUTHENTICATION: "/auth",
+    MESSAGE: "/messages",
 }
