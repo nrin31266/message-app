@@ -2,7 +2,7 @@
 
 import React, { useRef, useState } from "react";
 
-import { Message, MessageType, Status } from "@/models/MessageModel";
+import { ChatType, Message, MessageType, Status } from "@/models/MessageModel";
 import { MyInfo, User } from "@/models/UserModel";
 import { userSelector } from "@/redux/userSlice";
 import AttachFileRoundedIcon from "@mui/icons-material/AttachFileRounded";
@@ -12,7 +12,7 @@ import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfi
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import { Instant } from '@js-joda/core';
-
+import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -36,14 +36,15 @@ const ChatBottom = ({ user, onSendChat }: Props) => {
             content: message,
             senderId: myInfo.id,
             receiverId: user.id,
-            messageType: MessageType.PERSONAL,
+            messageType: MessageType.TEXT,
             createdAt: (Instant.now()).toString(),
+            chatType: ChatType.PERSONAL,
             messageStatus: {
                 status: Status.SENDING,
                 updatedAt: (Instant.now()).toString(),
                 id: -1
             },
-            id: -1
+            id: uuidv4(),
         }
         onSendChat(item);
       } catch (error) {
@@ -59,7 +60,7 @@ const ChatBottom = ({ user, onSendChat }: Props) => {
       }
     }
   };
-
+  
   return (
     <div className="chat-bottom mb-2 mt-2" style={{ flexShrink: 0 }}>
       <div

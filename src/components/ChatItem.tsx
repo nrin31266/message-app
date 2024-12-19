@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
 import { Message, Status } from "@/models/MessageModel";
 import { formatDate } from "@/utils/time";
-import { Avatar } from "@mui/material";
+import { Avatar, CircularProgress } from "@mui/material";
 import React, { useEffect } from "react";
 
 // Interface cho props
 interface Props {
-  message: Message
+  message: Message;
   isMyMes: boolean;
 }
 
@@ -46,7 +46,16 @@ const ChatItem = ({ message, isMyMes }: Props) => {
         }}
       >
         <p style={{ margin: "5px 0" }}>{message.content}</p>
-        <small style={{ fontSize: "0.75rem", color: "#888" }}>{formatDate(message.createdAt)}</small>
+        <div style={{ justifyContent: "end", display: "flex" }}>
+          <small style={{ fontSize: "0.75rem", color: "#888" }}>
+            {formatDate(message.createdAt)}
+          </small>
+          {message.messageStatus.status === Status.SENDING && (
+            <CircularProgress
+              sx={{ height: "1rem !important", width: "1rem !important" }}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

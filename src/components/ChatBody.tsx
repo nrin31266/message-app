@@ -6,8 +6,7 @@ import { User } from "@/models/UserModel";
 import { useSelector } from "react-redux";
 import { userSelector } from "@/redux/userSlice";
 import { PageRes } from "@/models/AppModel";
-import { Message } from "@/models/MessageModel";
-import Page from "./../app/page";
+import { ChatMessageReq, ChatType, Message, MessageType } from "@/models/MessageModel";
 import { CircularProgress } from "@mui/material";
 import { GLOBAL_API } from "@/config/config";
 import handleApi from "@/config/handleApi";
@@ -19,22 +18,44 @@ interface Props {
 
 const ChatBody = ({ userSelected, newMessage }: Props) => {
   const user: User = useSelector(userSelector);
-  const [messagePage, setMessagePage] = useState<PageRes<Message>>();
+  const [messagePage, setMessagePage] = useState<PageRes<Message>>({
+    data: [],
+    currentPage: 0,
+    pageSize: 0,
+    totalElements: 0,
+    totalPages: 0,
+  });
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const divRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (newMessage && messagePage !== undefined) {
-      setMessagePage((prev) => ({
-        data: [newMessage, ...(prev?.data || [])],
-        currentPage: prev?.currentPage ?? 1, // Giữ nguyên currentPage nếu có hoặc mặc định 1
-        totalPages: prev?.totalPages ?? 1, // Giữ nguyên totalPages nếu có hoặc mặc định 1
-        pageSize: prev?.pageSize ?? 10, // Giữ nguyên pageSize nếu có hoặc mặc định 10
-        totalElements: prev?.totalElements ?? (prev?.data.length ?? 0) + 1, // Cập nhật tổng số tin nhắn
+      setMessagePage((prev) => ({...prev, data: [newMessage, ...prev.data],
       }));
+
+      sendNewMessage(newMessage);
     }
   }, [newMessage]);
+
+  const sendNewMessage = async (message: Message) => {
+    const req: ChatMessageReq = {
+      content: message.content,
+      receiverId: message.receiverId,
+      senderId: message.senderId,
+      messageType: MessageType.TEXT,
+      chatType: ChatType.PERSONAL
+    };
+    const url = `${GLOBAL_API.MESSAGE}`;
+    try {
+      const res: any = await handleApi(url, req, "post");
+      const mes : Message = res.result;
+      setMessagePage((prev) => ({...prev, data: prev?.data.map((msg) =>msg.id === message.id ? mes : msg),
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (userSelected) {
@@ -126,7 +147,14 @@ const ChatBody = ({ userSelected, newMessage }: Props) => {
         <>chat now</>
       )}
       {isLoading && (
-        <div style={{ width: "100%", justifyContent: "center", display: 'flex', paddingTop: '20px' }}>
+        <div
+          style={{
+            width: "100%",
+            justifyContent: "center",
+            display: "flex",
+            paddingTop: "20px",
+          }}
+        >
           <CircularProgress />
         </div>
       )}

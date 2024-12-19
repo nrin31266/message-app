@@ -1,10 +1,11 @@
 export interface Message {
-  id: number;
+  id: number | string;
   senderId: string;
   receiverId: string;
-  messageType: string;
+  messageType: MessageType;
   content: string;
   createdAt: string;
+  chatType: ChatType;
   updatedAt?: any;
   messageStatus: MessageStatus;
   attachments?: any[];
@@ -21,15 +22,27 @@ export interface ChatMessageReq {
   receiverId: string;
   content: string;
   messageType: MessageType;
+  chatType: ChatType;
   conversationId?: number;
   attachments?: any[];
 }
 
 export enum MessageType {
+  VOICE = "VOICE",
+  IMAGE = "IMAGE",
+  FILE = "FILE",
+  TEXT = "TEXT",
+  VIDEO = "VIDEO",
+}
+
+export enum ChatType {
   GROUP = "GROUP",
   PERSONAL = "PERSONAL",
 }
 
 export enum Status {
-    SENT, RECEIVED, READ, SENDING
-  }
+  SENT = "SENT",
+  RECEIVED = "RECEIVED",
+  READ = "READ",
+  SENDING = "SENDING",
+}
