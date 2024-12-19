@@ -52,12 +52,15 @@
 .chat-left{
   flex-grow: 1;
   height: 100vh;
+  min-width: 400px;
+
 }
 
 .chat-right{
   flex-grow: 1;
   background-color: #999;
   /* max-width: 350px; */
+  min-width: 400px;
 }
 
 .chat-body{

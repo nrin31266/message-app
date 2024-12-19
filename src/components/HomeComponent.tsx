@@ -27,7 +27,7 @@ const HomeComponent = () => {
       >
         <Chat onBack={() => setUserSelected(undefined)} user={userSelected} />
       </div>
-      <div className="chat-right d-none d-xl-block ">c</div>
+      <div className="chat-right d-none d-xl-block">c</div>
     </div>
   );
 };
