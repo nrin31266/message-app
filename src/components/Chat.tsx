@@ -6,6 +6,7 @@ import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 
 import ChatBody from "./ChatBody";
 import ChatBottom from "./ChatBottom";
+import { Message } from "@/models/MessageModel";
 
 interface Props {
   user: User | undefined;
@@ -13,6 +14,9 @@ interface Props {
 }
 
 const Chat = ({ user, onBack }: Props) => {
+  const [newMessage, setNewMessage] = useState<Message>();
+
+
   const onClose = () => {
     onBack();
   };
@@ -57,10 +61,10 @@ const Chat = ({ user, onBack }: Props) => {
             }}
           >
             {/* Content */}
-            <ChatBody userSelected={user}/>
+            <ChatBody newMessage={newMessage} userSelected={user}/>
             
             {/* Input Bottom */}
-            <ChatBottom/>
+            <ChatBottom onSendChat={(newMessage)=>{setNewMessage(newMessage)}} user={user}/>
           </div>
         </>
       )}

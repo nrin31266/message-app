@@ -14,13 +14,27 @@ import handleApi from "@/config/handleApi";
 
 interface Props {
   userSelected: User;
+  newMessage?: Message
 }
 
-const ChatBody = ({ userSelected }: Props) => {
+const ChatBody = ({ userSelected, newMessage }: Props) => {
   const user: User = useSelector(userSelector);
   const [messagePage, setMessagePage] = useState<PageRes<Message>>();
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if(newMessage && messagePage !== undefined){
+      setMessagePage((prev) => ({
+        data: [newMessage, ...prev?.data || []],
+        currentPage: prev?.currentPage ?? 1, // Giữ nguyên currentPage nếu có hoặc mặc định 1
+        totalPages: prev?.totalPages ?? 1, // Giữ nguyên totalPages nếu có hoặc mặc định 1
+        pageSize: prev?.pageSize ?? 10, // Giữ nguyên pageSize nếu có hoặc mặc định 10
+        totalElements: prev?.totalElements ?? (prev?.data.length ?? 0) + 1, // Cập nhật tổng số tin nhắn
+      }));
+    }
+  }, [newMessage]);
+  
 
   useEffect(() => {
     if (userSelected && page === 1) {
@@ -90,7 +104,7 @@ const ChatBody = ({ userSelected }: Props) => {
           {messagePage.data.map((message, index) => (
             <ChatItem
               chat={message}
-              key={message.id}
+              key={index}
               isMyMes={user.id === message.senderId ? true : false}
             />
           ))}

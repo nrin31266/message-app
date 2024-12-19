@@ -2,16 +2,28 @@
 
 import React, { useRef, useState } from "react";
 
+import { Message, MessageType, Status } from "@/models/MessageModel";
+import { MyInfo, User } from "@/models/UserModel";
+import { userSelector } from "@/redux/userSlice";
+import AttachFileRoundedIcon from "@mui/icons-material/AttachFileRounded";
 import KeyboardVoiceRoundedIcon from "@mui/icons-material/KeyboardVoiceRounded";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
-import AttachFileRoundedIcon from "@mui/icons-material/AttachFileRounded";
 import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
-import ChatItem from "./ChatItem";
 import { Button } from "@mui/material";
-import { MyInfo } from "@/models/UserModel";
-import { userSelector } from "@/redux/userSlice";
 import { useSelector } from "react-redux";
-const ChatBottom = () => {
+import { Instant } from '@js-joda/core';
+
+
+
+
+
+
+interface Props {
+  user: User;
+  onSendChat: (message: Message)=>void;
+}
+
+const ChatBottom = ({ user, onSendChat }: Props) => {
   const [message, setMessage] = useState("");
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
   const myInfo: MyInfo = useSelector(userSelector);
@@ -19,8 +31,27 @@ const ChatBottom = () => {
   const handleSendMessage = () => {
     if (message.trim()) {
       console.log("Message sent:", message);
-      setMessage(""); // Reset lại message sau khi gửi
+      try {
+        const item: Message = {
+            content: message,
+            senderId: myInfo.id,
+            receiverId: user.id,
+            messageType: MessageType.PERSONAL,
+            createdAt: (Instant.now()).toString(),
+            messageStatus: {
+                status: Status.SENDING,
+                updatedAt: (Instant.now()).toString(),
+                id: -1
+            },
+            id: -1
+        }
+        onSendChat(item);
+      } catch (error) {
 
+      } finally {
+
+      }
+      setMessage(""); // Reset lại message sau khi gửi
       // Reset lại chiều cao của textarea
       if (messageInputRef.current) {
         messageInputRef.current.style.height = "auto"; // Đặt lại chiều cao ban đầu
@@ -28,6 +59,7 @@ const ChatBottom = () => {
       }
     }
   };
+
   return (
     <div className="chat-bottom mb-2 mt-2" style={{ flexShrink: 0 }}>
       <div

@@ -5,13 +5,31 @@ export interface Message {
   messageType: string;
   content: string;
   createdAt: string;
-  updatedAt: any;
+  updatedAt?: any;
   messageStatus: MessageStatus;
-  attachments: any[];
+  attachments?: any[];
 }
 
 export interface MessageStatus {
   id: number;
-  status: string;
+  status: Status;
   updatedAt: any;
 }
+
+export interface ChatMessageReq {
+  senderId: string;
+  receiverId: string;
+  content: string;
+  messageType: MessageType;
+  conversationId?: number;
+  attachments?: any[];
+}
+
+export enum MessageType {
+  GROUP = "GROUP",
+  PERSONAL = "PERSONAL",
+}
+
+export enum Status {
+    SENT, RECEIVED, READ, SENDING
+  }
