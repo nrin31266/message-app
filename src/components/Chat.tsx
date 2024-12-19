@@ -18,6 +18,7 @@ const Chat = ({ user, onBack }: Props) => {
 
 
   const onClose = () => {
+    setNewMessage(undefined);
     onBack();
   };
   

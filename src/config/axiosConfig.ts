@@ -14,7 +14,6 @@ const axiosInstance = axios.create({
 // Interceptor cho request
 axiosInstance.interceptors.request.use(
   async (config: any) => {
-    console.log('hihihihi')
     // Lấy token từ cookie và thêm vào headers nếu có
     const token = getCookie("token");
     config.headers = {

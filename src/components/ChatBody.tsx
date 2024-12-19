@@ -50,6 +50,7 @@ const ChatBody = ({ userSelected, newMessage }: Props) => {
     try {
       const res: any = await handleApi(url, req, "post");
       const mes : Message = res.result;
+      console.log(mes);
       setMessagePage((prev) => ({...prev, data: prev?.data.map((msg) =>msg.id === message.id ? mes : msg),
       }));
     } catch (error) {
@@ -74,7 +75,7 @@ const ChatBody = ({ userSelected, newMessage }: Props) => {
         userSelected.id
       }&page=${pageR ?? page}`;
       const res: any = await handleApi(urlR);
-
+      
       if (pageR === 1 || page === 1) {
         setMessagePage(res.result);
       } else {
@@ -83,7 +84,6 @@ const ChatBody = ({ userSelected, newMessage }: Props) => {
           data: [...(prevData?.data || []), ...res.result.data],
         }));
       }
-
       console.log(res);
     } catch (error: any) {
       console.log(error);
@@ -102,11 +102,6 @@ const ChatBody = ({ userSelected, newMessage }: Props) => {
     const top =
       e.currentTarget.scrollHeight - 5 <
       -e.currentTarget.scrollTop + e.currentTarget.clientHeight;
-    console.log(-e.currentTarget.scrollTop + e.currentTarget.clientHeight);
-
-    console.log("scrollTop:", e.currentTarget.scrollTop);
-    console.log("scrollHeight:", e.currentTarget.scrollHeight);
-    console.log("clientHeight:", e.currentTarget.clientHeight);
 
     // Kiểm tra nếu cuộn đến cuối và chưa đang tải dữ liệu
     if (
@@ -144,7 +139,7 @@ const ChatBody = ({ userSelected, newMessage }: Props) => {
           ))}
         </>
       ) : (
-        <>chat now</>
+        <>chat now...</>
       )}
       {isLoading && (
         <div

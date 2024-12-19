@@ -11,16 +11,12 @@ import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
-import { Instant } from '@js-joda/core';
-import { v4 as uuidv4 } from 'uuid';
-
-
-
-
+import { Instant } from "@js-joda/core";
+import { v4 as uuidv4 } from "uuid";
 
 interface Props {
   user: User;
-  onSendChat: (message: Message)=>void;
+  onSendChat: (message: Message) => void;
 }
 
 const ChatBottom = ({ user, onSendChat }: Props) => {
@@ -31,28 +27,23 @@ const ChatBottom = ({ user, onSendChat }: Props) => {
   const handleSendMessage = () => {
     if (message.trim()) {
       console.log("Message sent:", message);
-      try {
-        const item: Message = {
-            content: message,
-            senderId: myInfo.id,
-            receiverId: user.id,
-            messageType: MessageType.TEXT,
-            createdAt: (Instant.now()).toString(),
-            chatType: ChatType.PERSONAL,
-            messageStatus: {
-                status: Status.SENDING,
-                updatedAt: (Instant.now()).toString(),
-                id: -1
-            },
-            id: uuidv4(),
-        }
-        onSendChat(item);
-      } catch (error) {
-
-      } finally {
-
-      }
       setMessage(""); // Reset lại message sau khi gửi
+      const item: Message = {
+        content: message,
+        senderId: myInfo.id,
+        receiverId: user.id,
+        messageType: MessageType.TEXT,
+        createdAt: Instant.now().toString(),
+        chatType: ChatType.PERSONAL,
+        messageStatus: {
+          status: Status.SENDING,
+          updatedAt: Instant.now().toString(),
+          id: -1,
+        },
+        id: uuidv4(),
+      };
+      onSendChat(item);
+
       // Reset lại chiều cao của textarea
       if (messageInputRef.current) {
         messageInputRef.current.style.height = "auto"; // Đặt lại chiều cao ban đầu
@@ -60,7 +51,7 @@ const ChatBottom = ({ user, onSendChat }: Props) => {
       }
     }
   };
-  
+
   return (
     <div className="chat-bottom mb-2 mt-2" style={{ flexShrink: 0 }}>
       <div
