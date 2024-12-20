@@ -4,18 +4,28 @@ import React, { useEffect, useRef, useState } from "react";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import SearchIcon from "@mui/icons-material/Search";
-import { Button, InputBase, Menu, Box, MenuItem } from "@mui/material";
+import {
+  Button,
+  InputBase,
+  Menu,
+  Box,
+  MenuItem,
+  ListItemIcon,
+  Avatar,
+  Divider,
+} from "@mui/material";
 import ChatLeftBody from "./ChatLeftBody";
 import SittingComponent from "./SittingComponent";
 import { User } from "@/models/UserModel";
+import Settings from "@mui/icons-material/Settings";
 
 const iconStyle = { fontSize: "2rem" };
 
-interface Props{
-  onClickUser: (user: User)=>void
+interface Props {
+  onClickUser: (user: User) => void;
 }
 
-const ChatLeft = ({onClickUser}:Props) => {
+const ChatLeft = ({ onClickUser }: Props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [displayKey, setDisplayKey] = useState<"main" | "sitting">("main");
@@ -31,7 +41,7 @@ const ChatLeft = ({onClickUser}:Props) => {
     if (query) {
       // Thiết lập debounce timer
       debounceTimer.current = setTimeout(() => {
-        console.log('Searching for:', query);
+        console.log("Searching for:", query);
         setKeyword(query);
       }, 300); // Thời gian chờ sau khi dừng gõ
     } else {
@@ -44,7 +54,6 @@ const ChatLeft = ({onClickUser}:Props) => {
       }
     };
   }, [query]); // Chạy lại khi `query` thay đổi
-  
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -55,15 +64,14 @@ const ChatLeft = ({onClickUser}:Props) => {
   };
 
   const handleSearchReset = () => {
-    setIsSearch(false); 
-    setKeyword(""); 
+    setIsSearch(false);
+    setKeyword("");
     setQuery(""); // Reset state query
   };
 
-  const handleOnClickUser = (user:User)=>{
+  const handleOnClickUser = (user: User) => {
     onClickUser(user);
-  }
-  
+  };
 
   return (
     <>
@@ -80,11 +88,7 @@ const ChatLeft = ({onClickUser}:Props) => {
           style={{ display: "flex", height: "8%", alignItems: "center" }}
         >
           <Button
-            onClick={
-              !isSearch
-                ? handleOpenMenu
-                : handleSearchReset
-            }
+            onClick={!isSearch ? handleOpenMenu : handleSearchReset}
             sx={{ minWidth: 0, height: "max-content" }}
           >
             {!isSearch ? (
@@ -118,7 +122,11 @@ const ChatLeft = ({onClickUser}:Props) => {
         </div>
 
         <Box sx={{ height: "92%" }}>
-          <ChatLeftBody onClickUser={(v)=>handleOnClickUser(v)} keyword={keyword} isSearch={isSearch} />
+          <ChatLeftBody
+            onClickUser={(v) => handleOnClickUser(v)}
+            keyword={keyword}
+            isSearch={isSearch}
+          />
         </Box>
 
         {/* Menu */}
@@ -130,12 +138,17 @@ const ChatLeft = ({onClickUser}:Props) => {
           open={open}
           onClose={handleClose}
         >
-          <MenuItem>Profile</MenuItem>
+          <MenuItem><Avatar /> Profile</MenuItem>
+          <Divider />
           <MenuItem
             onClick={() => {
+              handleClose();
               setDisplayKey("sitting");
             }}
           >
+            <ListItemIcon>
+              <Settings fontSize="small" />
+            </ListItemIcon>
             Sitting
           </MenuItem>
         </Menu>
