@@ -18,6 +18,7 @@ import ChatLeftBody from "./ChatLeftBody";
 import SittingComponent from "./SittingComponent";
 import { User } from "@/models/UserModel";
 import Settings from "@mui/icons-material/Settings";
+import NewGroupComponent from "./NewGroupComponent";
 
 const iconStyle = { fontSize: "2rem" };
 
@@ -28,7 +29,7 @@ interface Props {
 const ChatLeft = ({ onClickUser }: Props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const [displayKey, setDisplayKey] = useState<"main" | "sitting">("main");
+  const [displayKey, setDisplayKey] = useState<"main" | "sitting" | "new-group">("main");
   const [isSearch, setIsSearch] = useState(false);
   const [query, setQuery] = useState("");
   const [keyword, setKeyword] = useState("");
@@ -123,6 +124,7 @@ const ChatLeft = ({ onClickUser }: Props) => {
 
         <Box sx={{ height: "92%" }}>
           <ChatLeftBody
+            onClickNewGroup={()=> setDisplayKey("new-group")}
             onClickUser={(v) => handleOnClickUser(v)}
             keyword={keyword}
             isSearch={isSearch}
@@ -163,6 +165,14 @@ const ChatLeft = ({ onClickUser }: Props) => {
       >
         <SittingComponent onClose={() => setDisplayKey("main")} />
       </Box>
+
+      {
+        displayKey === "new-group" && <Box>
+          <NewGroupComponent onClose={() => setDisplayKey("main")} />
+        </Box>
+      }  
+
+
     </>
   );
 };

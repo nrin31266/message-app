@@ -18,9 +18,10 @@ interface Props {
   isSearch: boolean;
   keyword: string;
   onClickUser: (user: User) => void;
+  onClickNewGroup: ()=>void;
 }
 
-const ChatLeftBody = ({ isSearch, keyword, onClickUser }: Props) => {
+const ChatLeftBody = ({ isSearch, keyword, onClickUser, onClickNewGroup }: Props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -59,7 +60,7 @@ const ChatLeftBody = ({ isSearch, keyword, onClickUser }: Props) => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}><ListItemIcon><GroupAddOutlinedIcon/></ListItemIcon>New group</MenuItem>
+        <MenuItem onClick={()=> {handleClose(); onClickNewGroup()}}><ListItemIcon><GroupAddOutlinedIcon/></ListItemIcon>New group</MenuItem>
       </Menu>
         <div></div>
       </div>
