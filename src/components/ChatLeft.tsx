@@ -167,7 +167,7 @@ const ChatLeft = ({ onClickUser }: Props) => {
       </Box>
 
       {
-        displayKey === "new-group" && <Box>
+        displayKey === "new-group" && <Box sx={{height: '100%'}}>
           <NewGroupComponent onClose={() => setDisplayKey("main")} />
         </Box>
       }  
